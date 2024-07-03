@@ -14,16 +14,65 @@ with pd.ExcelFile(workbook_path) as excel_file:
 # Initialize dictionaries to store results and total employment
 results = {}
 total_employment = {}
+absolute_units = {}
+
+ai_robotics_adoption = {
+    111: 0.029, 112: 0.029, 113: 0.029, 114: 0.029, 115: 0.029,
+    211: 0.028, 212: 0.028, 213: 0.028,
+    221: 0.085,
+    236: 0.053, 237: 0.053, 238: 0.053,
+    311: 6.776, 312: 6.776,
+    313: 0.154, 314: 0.154, 315: 0.154, 316: 0.154,
+    321: 2.155, 322: 0.273, 323: 0.273,
+    324: 13.497, 325: 13.497, 326: 13.497,
+    327: 1.409,
+    331: 4.406,
+    332: 10.599,
+    333: 3.994,
+    334: 2.701, 335: 2.701,
+    336: 47.101,
+    337: 2.155,
+    339: 1.703,
+    423: 0.053, 424: 0.053, 425: 0.053,
+    441: 0.053, 444: 0.053, 445: 2.701,
+    449: 2.701, 455: 2.701, 456: 0.053,
+    457: 2.701, 458: 2.701, 459: 2.701,
+    481: 13.497, 482: 13.497, 483: 13.497,
+    484: 13.497, 485: 13.497, 486: 0.053,
+    487: 0.053, 488: 2.701, 491: 2.701,
+    492: 13.497, 493: 13.497, 512: 13.497,
+    513: 0.053, 516: 2.701, 517: 13.497,
+    518: 0.053, 519: 0.053, 521: 0.053,
+    522: 2.701, 523: 2.701, 524: 2.701,
+    525: 2.701, 531: 2.701, 532: 0.053,
+    533: 0.053, 541: 2.701, 551: 0.053,
+    561: 13.497, 562: 13.497, 611: 0.214,
+    621: 0.053, 622: 0.053, 623: 0.053,
+    624: 0.053, 711: 0.053, 712: 0.053,
+    713: 2.701, 721: 13.497, 722: 2.701,
+    811: 0.053, 812: 0.053, 813: 0.053,
+    814: 0.053, 921: 2.701, 922: 0.053,
+    923: 0.053, 924: 0.053, 925: 0.053,
+    926: 0.053, 928: 0.053, 999: 0.053,
+    927: 0.053
+}
 
 # Process each sheet
 for sheet, df in dfs.items():
-    total_emp = df[(df['agglvl_code'] == 70) | (df['agglvl_code'] == 40)]['annual_avg_emplvl'].sum()
-    total_employment[sheet] = total_emp
     df_filtered = df[(df['agglvl_code'] == 75) | (df['agglvl_code'] == 45)]
+    total_emp = df_filtered['annual_avg_emplvl'].sum()
+    total_employment[sheet] = total_emp
     industry_percentages = df_filtered.groupby('industry_code')['annual_avg_emplvl'].sum() / total_emp * 100
     results[sheet] = industry_percentages.to_dict()
 
+    # Calculate absolute units
+    industry_units = df_filtered.groupby('industry_code').apply(
+        lambda x: x['annual_avg_emplvl'].sum() * ai_robotics_adoption.get(int(str(x.name)[:3]), 0.001) / 1000
+    )
+    absolute_units[sheet] = industry_units.to_dict()
+
 output_df = pd.DataFrame(results)
+absolute_units_df = pd.DataFrame(absolute_units)
 
 # Create mapping data and DataFrames
 mapping_data = {
@@ -75,25 +124,7 @@ naics_to_ifr = {
 
 mapping_df['IFR Industry'] = mapping_df['NAICS'].map(naics_to_ifr)
 
-ai_robotics_adoption = {
-    111: 0.029, 112: 0.029, 113: 0.029, 114: 0.029, 115: 0.029,
-    211: 0.028, 212: 0.028, 213: 0.028,
-    221: 0.085,
-    236: 0.053, 237: 0.053, 238: 0.053,
-    311: 6.776, 312: 6.776,
-    313: 0.154, 314: 0.154, 315: 0.154, 316: 0.154,
-    321: 2.155, 337: 2.155,
-    322: 0.273, 323: 0.273,
-    324: 13.497, 325: 13.497, 326: 13.497,
-    327: 1.409,
-    331: 4.406,
-    332: 10.599,
-    333: 3.994,
-    334: 2.701, 335: 2.701,
-    336: 47.101,
-    339: 1.703,
-    611: 0.214,
-}
+
 
 mapping_df['AI/Robotics Adoption (units per thousand workers)'] = mapping_df['NAICS'].map(ai_robotics_adoption).fillna(0.001)
 
@@ -143,7 +174,7 @@ other_non_manufacturing_assessments = {
     '459': 'Medium', '481': 'High', '482': 'High', '483': 'High', '484': 'High',
     '485': 'High', '486': 'Low', '487': 'Low', '488': 'Medium', '491': 'Medium',
     '492': 'High', '493': 'High', '512': 'Medium', '513': 'Low', '516': 'Medium',
-    '517': 'High', '518': 'Low', '519': 'Low', '521': 'Low', '522': 'Medium',
+    '517': 'High', '518': 'Low', '519': 'Low', '521': 'High', '522': 'Medium',
     '523': 'Medium', '524': 'Medium', '525': 'Medium', '531': 'Medium', '532': 'Low',
     '533': 'Low', '541': 'Medium', '551': 'Low', '561': 'High', '562': 'High',
     '611': 'Low', '621': 'Low', '622': 'Low', '623': 'Low', '624': 'Low', '711': 'Low',
@@ -245,6 +276,7 @@ overall_stats = pd.DataFrame({
 # Save results to a new Excel file
 with pd.ExcelWriter('industry_analysis_results.xlsx') as writer:
     output_df.to_excel(writer, sheet_name='Industry Analysis', index=True)
+    absolute_units_df.to_excel(writer, sheet_name='Absolute Units', index=True)
     mapping_df.to_excel(writer, sheet_name='NAICS Code Mapping', index=False)
     pd.DataFrame(naics_to_ifr.items(), columns=['NAICS', 'IFR Industry']).to_excel(writer, sheet_name='NAICS to IFR Mapping', index=False)
     county_units_df.to_excel(writer, sheet_name='County AI-Robotics Units')
