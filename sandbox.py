@@ -3,7 +3,7 @@ import numpy as np
 import openpyxl
 
 # Load the Excel workbook
-workbook_path = 'BLS - Industry By County Data.xlsx'
+workbook_path = 'BLS - Industry By County Data.xlsx' #https://data.bls.gov/cew/apps/data_views/data_views.htm#tab=Tables
 mapping_csv_file_path = 'mapping market to county.csv'
 
 # Read all sheets at once
