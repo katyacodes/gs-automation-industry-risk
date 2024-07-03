@@ -19,3 +19,17 @@ Subsequently, this model expands to AI and AI Agents, as well as, advanced human
 - International Federation of Robotics data [Link](https://ifr.org/ifr-press-releases/news/world-robotics-2023-report-asia-ahead-of-europe-and-the-americas)
 
 
+## Data Preparation
+
+`BLS - Industry By County Data.xlsx` contains over 60 sheets (one per county) with employment data from BLS. If you need different counties, you can download your own data from the Bureau of Labor Statistics.
+
+`mapping market to county.csv` contains the mapping for markets. Each market can consist of up to 3 counties in the state. You can populate accordingly to your needs.
+
+## Preparing environment
+
+- install python 3.11 or later
+- install python dependencies `pip install -r requirements.txt`
+
+## running code
+
+`python sandbox.py` will generate an Excel file with all calculations and intermediate results.
