@@ -1,0 +1,1 @@
+# gs-automation-industry-risk
