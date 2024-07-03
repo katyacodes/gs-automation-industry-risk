@@ -1,0 +1,26 @@
+market_id,market_publish,County 1,County 2,County 3,State
+1,Atlanta,Fulton,,,Georgia
+2,Austin,Travis,,,Texas
+3,Baltimore,Baltimore City,,,Maryland
+4,Boston,Suffolk,,,Massachusetts
+5,New Jersey (Central),Middlesex,,,New Jersey
+6,Charlotte,Mecklenburg,,,North Carolina
+7,Chicago,Cook,,,Illinois
+8,Cincinnati,Hamilton,,,Ohio
+9,Cleveland,Cuyahoga,,,Ohio
+10,Denver,Denver,,,Colorado
+11,Detroit,Wayne,,,Michigan
+12,Fort Lauderdale,Broward,,,Florida
+13,Houston,Harris,,,Texas
+14,Indianapolis,Marion,,,Indiana
+15,Jacksonville,Duval,,,Florida
+16,Kansas City,Jackson,,,Missouri
+17,Las Vegas,Clark,,,Nevada
+18,Long Island,Nassau,,,New York
+19,SoCal,Los Angeles,Orange,,California
+20,Louisville,Jefferson,,,Kentucky
+21,Memphis,Shelby,,,Tennessee
+22,Miami,Miami-Dade,,,Florida
+23,Minneapolis,Hennepin,,,Minnesota
+24,Nashville,Davidson,,,Tennessee
+25,New York,New York,,,New York
